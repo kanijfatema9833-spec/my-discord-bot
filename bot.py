@@ -46,10 +46,10 @@ async def on_ready():
     except Exception as e:
         print(f"Failed to sync commands: {e}")
 
-    # বটের স্ট্যাটাস Do Not Disturb এবং কাস্টম অ্যাক্টিভিটি সেট করা
-        import discord
+        # বটের স্ট্যাটাস Do Not Disturb এবং কাস্টম অ্যাক্টিভিটি সেট করা
     activity = discord.CustomActivity(name="Watching BFTT: YET AGAIN 1B!")
     await bot.change_presence(status=discord.Status.dnd, activity=activity)
+
 
     print(f"Logged in as {bot.user.name}")
     print("Bot is active and running!")
