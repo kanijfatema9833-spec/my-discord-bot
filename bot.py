@@ -81,7 +81,7 @@ async def on_member_join(member):
 async def on_member_remove(member):
     channel = member.guild.get_channel(WELCOME_GOODBYE_CHANNEL_ID)
     if channel:
-        await channel.send(f"Goodbye, {member.name}. Sad to see you go!")
+        await channel.send(f"Goodbye @<{member.mention}> from BFTT: YET AGAIN!")
 
     logs_channel = member.guild.get_channel(LOGS_CHANNEL_ID)
     if logs_channel:
