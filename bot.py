@@ -126,6 +126,63 @@ async def on_member_unban(guild, user):
         embed = discord.Embed(title="Member Unbanned", description=f"{user.name} has been unbanned.", color=discord.Color.teal(), timestamp=datetime.datetime.now())
         await logs_channel.send(embed=embed)
 
+# --- Member Audit (Role Change, Timeout, Kick) ---
+@bot.event
+async def on_member_update(before, after):
+    logs_channel = before.guild.get_channel(LOGS_CHANNEL_ID)
+    if not logs_channel:
+        return
+
+    # Role Added / Removed
+    if before.roles != after.roles:
+        added = [r.name for r in after.roles if r not in before.roles]
+        removed = [r.name for r in before.roles if r not in after.roles]
+        if added:
+            embed = discord.Embed(title="Role Added", description=f"Role **{', '.join(added)}** added to {after.mention}", color=discord.Color.green(), timestamp=datetime.datetime.now())
+            await logs_channel.send(embed=embed)
+        if removed:
+            embed = discord.Embed(title="Role Removed", description=f"Role **{', '.join(removed)}** removed from {after.mention}", color=discord.Color.orange(), timestamp=datetime.datetime.now())
+            await logs_channel.send(embed=embed)
+
+    # Timeout / Untimeout
+    if before.timed_out_until != after.timed_out_until:
+        if after.timed_out_until:
+            embed = discord.Embed(title="Member Timeouted", description=f"{after.mention} has been timed out until {after.timed_out_until.strftime('%Y-%m-%d %H:%M:%S')}", color=discord.Color.red(), timestamp=datetime.datetime.now())
+        else:
+            embed = discord.Embed(title="Member Untimeouted", description=f"Timeout removed for {after.mention}", color=discord.Color.green(), timestamp=datetime.datetime.now())
+        await logs_channel.send(embed=embed)
+
+# --- Role Events ---
+@bot.event
+async def on_guild_role_create(role):
+    logs_channel = role.guild.get_channel(LOGS_CHANNEL_ID)
+    if logs_channel:
+        embed = discord.Embed(title="Role Created", description=f"Role **{role.name}** was created.", color=discord.Color.blue(), timestamp=datetime.datetime.now())
+        await logs_channel.send(embed=embed)
+
+@bot.event
+async def on_guild_role_delete(role):
+    logs_channel = role.guild.get_channel(LOGS_CHANNEL_ID)
+    if logs_channel:
+        embed = discord.Embed(title="Role Deleted", description=f"Role **{role.name}** was deleted.", color=discord.Color.dark_red(), timestamp=datetime.datetime.now())
+        await logs_channel.send(embed=embed)
+
+# --- Channel Events ---
+@bot.event
+async def on_guild_channel_create(channel):
+    logs_channel = channel.guild.get_channel(LOGS_CHANNEL_ID)
+    if logs_channel:
+        embed = discord.Embed(title="Channel Created", description=f"Channel {channel.mention} (**{channel.name}**) was created.", color=discord.Color.green(), timestamp=datetime.datetime.now())
+        await logs_channel.send(embed=embed)
+
+@bot.event
+async def on_guild_channel_delete(channel):
+    logs_channel = channel.guild.get_channel(LOGS_CHANNEL_ID)
+    if logs_channel:
+        embed = discord.Embed(title="Channel Deleted", description=f"Channel **{channel.name}** was deleted.", color=discord.Color.red(), timestamp=datetime.datetime.now())
+        await logs_channel.send(embed=embed)
+
+
 # --- মডারেশন এবং অন্যান্য স্ল্যাশ কমান্ডসমূহ ---
 
 @bot.tree.command(name="say", description="Makes the bot say something")
