@@ -68,7 +68,7 @@ async def on_member_join(member):
     # ওয়েলকাম মেসেজ পাঠানো
     channel = member.guild.get_channel(WELCOME_GOODBYE_CHANNEL_ID)
     if channel:
-        await channel.send(f"Welcome to the server, {member.mention}! Glad to have you here.")
+        await channel.send(f"Welcome <@{member.mention}> to BFTT: YET AGAIN!")
 
     # লগ চ্যালেনে মেম্বার জয়েনের লগ
     logs_channel = member.guild.get_channel(LOGS_CHANNEL_ID)
